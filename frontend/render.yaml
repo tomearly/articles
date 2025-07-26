@@ -1,0 +1,7 @@
+services:
+  - type: static
+    name: juris-frontend
+    rootDir: frontend
+    buildCommand: ""
+    staticPublishPath: .
+    plan: free

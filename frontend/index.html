@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Juris.js Article Submission</title>
+  <script src="https://unpkg.com/juris/dist/juris.umd.js"></script>
+</head>
+<body>
+  <h1>Submit an Article</h1>
+  <form id="articleForm">
+    <input type="text" id="title" placeholder="Title" required><br><br>
+    <textarea id="content" placeholder="Content" rows="6" cols="50" required></textarea><br><br>
+    <button type="button" onclick="addCitation()">Add Citation</button>
+    <ul id="citationsList"></ul>
+    <button type="submit">Submit</button>
+  </form>
+  <script>
+    const citations = [];
+
+    async function addCitation() {
+      const citation = await juris.fetch('10.1038/s41586-020-2649-2');
+      citations.push(citation);
+      const li = document.createElement('li');
+      li.textContent = citation.title;
+      document.getElementById('citationsList').appendChild(li);
+    }
+
+    document.getElementById('articleForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('title').value;
+      const content = document.getElementById('content').value;
+      const response = await fetch('https://juris-api.onrender.com/api/articles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: crypto.randomUUID(),
+          title,
+          content,
+          citations
+        })
+      });
+      const result = await response.json();
+      alert(result.message);
+    });
+  </script>
+</body>
+</html>
