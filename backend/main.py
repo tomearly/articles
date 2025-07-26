@@ -1,8 +1,8 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
-import uuid
 
 app = FastAPI()
 
@@ -41,3 +41,9 @@ def submit_article(article: Article):
 @app.get("/api/articles")
 def list_articles():
     return ARTICLES
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
+
